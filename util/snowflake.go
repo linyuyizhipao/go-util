@@ -14,9 +14,6 @@ const (
 	numberMax   int64 = -1 ^ (-1 << numberBits)
 	timeShift   = workerBits + numberBits
 	workerShift = numberBits
-	// 如果在程序跑了一段时间修改了epoch这个值 可能会导致生成相同的ID，
-	//这个值请自行设置为你系统准备上线前的精确到毫秒级别的时间戳，因为雪花时间戳保证唯一的部分最多管69年（2的41次方），
-	//所以此值设置为你当前时间戳能够保证你的系统是从当前时间开始往后推69年
 	startTime   int64 = 1525705533000
 )
 
