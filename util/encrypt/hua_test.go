@@ -8,7 +8,7 @@ import (
 
 func TestOpenApiEncrypt_Encrypt(t *testing.T) {
 	content :="ghdfgdfsdfsdffgdfggsdfgsfgsfg"
-	e :=encrypt.OpenApiEncrypt{}
+	e :=encrypt.P
 	encryptContent,err :=e.Encrypt(content)
 	fmt.Println(encryptContent)
 	if err!=nil{

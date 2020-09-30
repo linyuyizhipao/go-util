@@ -18,12 +18,12 @@ const (
 	encryptLength = 128
 )
 
-type OpenApiEncrypt struct {
+var P openApiEncrypt
 
-}
+type openApiEncrypt struct {}
 
 
-func (o *OpenApiEncrypt)Encrypt(content string)(encodeStr string,err error){
+func (o *openApiEncrypt)Encrypt(content string)(encodeStr string,err error){
 
 	if content == "" {
 		err = errors.New("content不能为空")
@@ -49,7 +49,7 @@ func (o *OpenApiEncrypt)Encrypt(content string)(encodeStr string,err error){
 }
 
 //用于邮箱手机号码解密
-func (o *OpenApiEncrypt) Decrypt(text string) (content string, err error) {
+func (o *openApiEncrypt) Decrypt(text string) (content string, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = errors.New("content if r := recover(); r != nil { Decrypt.解密失败")
@@ -78,7 +78,7 @@ func (o *OpenApiEncrypt) Decrypt(text string) (content string, err error) {
 
 
 // secretKey 长度可能不为16，这个函数是一个映射16位操作的行为
-func (o *OpenApiEncrypt) AESSHA1PRNG(content string, encryptLength int) (encryptStr string) {
+func (o *openApiEncrypt) AESSHA1PRNG(content string, encryptLength int) (encryptStr string) {
 	keyBytes := []byte(content)
 	hashs := o.SHA1(o.SHA1(keyBytes))
 	maxLen := len(hashs)
@@ -94,7 +94,7 @@ func (o *OpenApiEncrypt) AESSHA1PRNG(content string, encryptLength int) (encrypt
 }
 
 //获取iv随机变量
-func(o *OpenApiEncrypt) getIv() []byte {
+func(o *openApiEncrypt) getIv() []byte {
 	str := "0123456789abcdefghijklmnopqrstuvwxyz"
 	bytes := []byte(str)
 	result := []byte{}
@@ -106,20 +106,20 @@ func(o *OpenApiEncrypt) getIv() []byte {
 }
 
 //加密内容长度不够自动补全
-func(o *OpenApiEncrypt) pad(ciphertext []byte, blockSize int) []byte {
+func(o *openApiEncrypt) pad(ciphertext []byte, blockSize int) []byte {
 	padding := blockSize - len(ciphertext)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(ciphertext, padtext...)
 }
 
-func (o *OpenApiEncrypt)unpad(ciphertext []byte) []byte {
+func (o *openApiEncrypt)unpad(ciphertext []byte) []byte {
 	length := len(ciphertext)
 	//去掉最后一次的padding
 	unpadding := int(ciphertext[length-1])
 	return ciphertext[:(length - unpadding)]
 }
 
-func(o *OpenApiEncrypt) SHA1(data []byte) []byte {
+func(o *openApiEncrypt) SHA1(data []byte) []byte {
 	h := sha1.New()
 	h.Write(data)
 	return h.Sum(nil)
